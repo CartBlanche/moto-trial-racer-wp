@@ -1,32 +1,72 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010 Express for Windows Phone
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoTrialRacer", "MotoTrialRacer\MotoTrialRacer\MotoTrialRacer.csproj", "{AA22069A-4109-4E67-BFA1-473BECB8C98F}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{11111111-1111-1111-1111-111111111111}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoTrialRacerContent", "MotoTrialRacer\MotoTrialRacerContent\MotoTrialRacerContent.contentproj", "{0515B61A-F0EA-468A-8D35-0DF3A043A158}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Box2D.XNA", "Dependencies\Box2D.XNA\Box2D.XNA.csproj", "{22222222-2222-2222-2222-222222222222}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Box2D.XNA - wp7", "Box2D.XNA\Box2D.XNA - wp7.csproj", "{066846BE-AAEA-4EB6-BAA8-2D6B60B3BDB3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Android", "Android", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "iOS", "iOS", "{491FE1ED-8160-41E3-8212-14465BC4EDD7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{0CBBFDB8-AD0D-4EC4-BC2B-A5EB666DFAE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{67E1337A-BD8B-4E47-883A-EAFF7EBC3B99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoTrialRacer", "Android\MotoTrialRacer.csproj", "{864A0917-2133-35B2-E530-83258DC25E10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoTrialRacer", "Desktop\MotoTrialRacer.csproj", "{388A95C9-0CBA-6E94-626C-706912A45402}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoTrialRacer", "iOS\MotoTrialRacer.csproj", "{694B62E9-2E00-775B-2385-50A4DC2F7AC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoTrialRacer", "Windows\MotoTrialRacer.csproj", "{B745717A-6062-0960-C5D3-44A71EB5419C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Windows Phone = Debug|Windows Phone
-		Release|Windows Phone = Release|Windows Phone
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AA22069A-4109-4E67-BFA1-473BECB8C98F}.Debug|Windows Phone.ActiveCfg = Debug|Windows Phone
-		{AA22069A-4109-4E67-BFA1-473BECB8C98F}.Debug|Windows Phone.Build.0 = Debug|Windows Phone
-		{AA22069A-4109-4E67-BFA1-473BECB8C98F}.Debug|Windows Phone.Deploy.0 = Debug|Windows Phone
-		{AA22069A-4109-4E67-BFA1-473BECB8C98F}.Release|Windows Phone.ActiveCfg = Release|Windows Phone
-		{AA22069A-4109-4E67-BFA1-473BECB8C98F}.Release|Windows Phone.Build.0 = Release|Windows Phone
-		{AA22069A-4109-4E67-BFA1-473BECB8C98F}.Release|Windows Phone.Deploy.0 = Release|Windows Phone
-		{0515B61A-F0EA-468A-8D35-0DF3A043A158}.Debug|Windows Phone.ActiveCfg = Debug|Windows Phone
-		{0515B61A-F0EA-468A-8D35-0DF3A043A158}.Release|Windows Phone.ActiveCfg = Release|Windows Phone
-		{066846BE-AAEA-4EB6-BAA8-2D6B60B3BDB3}.Debug|Windows Phone.ActiveCfg = Debug|Windows Phone
-		{066846BE-AAEA-4EB6-BAA8-2D6B60B3BDB3}.Debug|Windows Phone.Build.0 = Debug|Windows Phone
-		{066846BE-AAEA-4EB6-BAA8-2D6B60B3BDB3}.Release|Windows Phone.ActiveCfg = Release|Windows Phone
-		{066846BE-AAEA-4EB6-BAA8-2D6B60B3BDB3}.Release|Windows Phone.Build.0 = Release|Windows Phone
+		{11111111-1111-1111-1111-111111111111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11111111-1111-1111-1111-111111111111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11111111-1111-1111-1111-111111111111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11111111-1111-1111-1111-111111111111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22222222-2222-2222-2222-222222222222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22222222-2222-2222-2222-222222222222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22222222-2222-2222-2222-222222222222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22222222-2222-2222-2222-222222222222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{864A0917-2133-35B2-E530-83258DC25E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{864A0917-2133-35B2-E530-83258DC25E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{864A0917-2133-35B2-E530-83258DC25E10}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{864A0917-2133-35B2-E530-83258DC25E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{864A0917-2133-35B2-E530-83258DC25E10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{864A0917-2133-35B2-E530-83258DC25E10}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{388A95C9-0CBA-6E94-626C-706912A45402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{388A95C9-0CBA-6E94-626C-706912A45402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{388A95C9-0CBA-6E94-626C-706912A45402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{388A95C9-0CBA-6E94-626C-706912A45402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{694B62E9-2E00-775B-2385-50A4DC2F7AC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{694B62E9-2E00-775B-2385-50A4DC2F7AC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{694B62E9-2E00-775B-2385-50A4DC2F7AC9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{694B62E9-2E00-775B-2385-50A4DC2F7AC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{694B62E9-2E00-775B-2385-50A4DC2F7AC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{694B62E9-2E00-775B-2385-50A4DC2F7AC9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{B745717A-6062-0960-C5D3-44A71EB5419C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B745717A-6062-0960-C5D3-44A71EB5419C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B745717A-6062-0960-C5D3-44A71EB5419C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B745717A-6062-0960-C5D3-44A71EB5419C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{864A0917-2133-35B2-E530-83258DC25E10} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{388A95C9-0CBA-6E94-626C-706912A45402} = {0CBBFDB8-AD0D-4EC4-BC2B-A5EB666DFAE7}
+		{694B62E9-2E00-775B-2385-50A4DC2F7AC9} = {491FE1ED-8160-41E3-8212-14465BC4EDD7}
+		{B745717A-6062-0960-C5D3-44A71EB5419C} = {67E1337A-BD8B-4E47-883A-EAFF7EBC3B99}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3BE3D20F-6789-47F4-9469-56FA5816E4C1}
 	EndGlobalSection
 EndGlobal
