@@ -687,3 +687,8 @@
 
 #begin infotexts.xml
 /copy:infotexts.xml
+
+#begin infotexts.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:infotexts.xml
