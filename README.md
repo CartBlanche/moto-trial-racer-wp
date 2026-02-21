@@ -96,9 +96,17 @@ http://create.msdn.com/en-us/education/gamedevelopment
 
 License
 -------------------------------------------------------------------------------
-You can find license details in Licence.txt file provided with this project
-or online at
-https://github.com/Microsoft/moto-trial-racer-wp/blob/master/Licence.txt
+This project has a complex license history. Please read [LICENSE-STATUS.md](LICENSE-STATUS.md)
+for a full explanation.
+
+**Short version:** The original Microsoft Mobile Oy license ([Licence.txt](Licence.txt)) is
+preserved for attribution. However, its sole permitted use case — development for Microsoft
+Mobile devices — is permanently extinct following Microsoft's exit from the mobile hardware
+business (2016) and the end-of-life of Windows Phone (2017). On the basis that the original
+license purpose has been permanently frustrated, this fork is provisionally offered under
+the [MIT License](LICENSE) pending clarification from Microsoft Open Source.
+
+The original copyright notice and `Licence.txt` are retained in full, unmodified.
 
 
 Version history
