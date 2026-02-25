@@ -24,6 +24,21 @@ namespace MotoTrialRacer.UI
 
 		public String Name { get; private set; }
 
+        /// <summary>
+        /// When true the button is rendered with a yellow tint to indicate
+        /// keyboard / gamepad focus. Managed by the View navigation system.
+        /// </summary>
+        public bool IsFocused { get; set; }
+
+        /// <summary>
+        /// Programmatically activates the button as if the player tapped it.
+        /// Used by the keyboard / gamepad navigation system.
+        /// </summary>
+        public void Press()
+        {
+            ButtonPressed?.Invoke(this);
+        }
+
         private int width;
         private int height;
         private Rectangle destination;
@@ -297,7 +312,9 @@ namespace MotoTrialRacer.UI
 
 		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(currentTexture, currentDestination, Color.White); 
+            // Yellow tint when focused via keyboard/gamepad; normal white otherwise.
+            Color tint = IsFocused ? Color.Yellow : Color.White;
+			spriteBatch.Draw(currentTexture, currentDestination, tint);
 		}
 	}
 }

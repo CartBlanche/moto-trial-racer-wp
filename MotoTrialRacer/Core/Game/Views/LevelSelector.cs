@@ -109,6 +109,9 @@ namespace MotoTrialRacer
             buttons = myLevelsPage ? myButtons : preDefinedButtons;
 
             font = game.Content.Load<SpriteFont>("SpriteFont1");
+
+            // Pre-focus the first item so keyboard/gamepad navigation is ready immediately.
+            FocusFirst();
         }
 
         void tmpButton_ButtonLongPressed(Button sender)
@@ -176,9 +179,21 @@ namespace MotoTrialRacer
             game.ShowMyLevelsSelector(false);
         }
 
-        public override void Update()
+        protected override List<Button> GetNavigableButtons()
         {
-            base.Update();
+            // Show yes/no when a delete confirmation is pending.
+            if (deleteQuestion != "")
+                return new List<Button> { yesButton, noButton };
+
+            // Otherwise the active level list plus the back button.
+            var list = new List<Button>(buttons);
+            list.Add(backButton);
+            return list;
+        }
+
+        public override void Update(InputManager input)
+        {
+            base.Update(input);
             if (touchChanged)
             {
                 if (deleteQuestion != "")

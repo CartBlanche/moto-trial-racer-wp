@@ -208,7 +208,7 @@ namespace MotoTrialRacer
         /// <summary>
         /// Updates all buttons and level components in the level editor.
         /// </summary>
-        public override void Update()
+        public override void Update(InputManager input)
         {
             transform.M11 = zoom;
             transform.M22 = zoom;
@@ -217,13 +217,13 @@ namespace MotoTrialRacer
 
             if (testing)
             {
-                base.Update();
+                base.Update(input);
                 if (!testing)
                     closeButton_ButtonPressed(null);
 
                 if (!isReady)
                 {
-                    TouchCollection touchCollection = TouchPanel.GetState();
+                    var touchCollection = input.GetTouches();
                     if (touchCollection.Count > 0)
                     {
                         closeButton.Update(touchCollection[0]);
@@ -232,7 +232,7 @@ namespace MotoTrialRacer
             }
             else
             {
-                TouchCollection touchCollection = TouchPanel.GetState();
+                var touchCollection = input.GetTouches();
                 if (touchCollection.Count > 0)
                 {
                     if (backButton.Update(touchCollection[0]))

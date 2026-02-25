@@ -40,9 +40,9 @@ namespace MotoTrialRacer
         /// Updates the counter of the view.
         /// When the view is shown for two seconds, it's closed.
         /// </summary>
-        public override void Update()
+        public override void Update(InputManager input)
         {
-            base.Update();
+            base.Update(input);
             counter++;
             if (counter == viewingTime)
                 game.OpenMenu(); 

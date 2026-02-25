@@ -42,6 +42,7 @@ namespace MotoTrialRacer
         private Button rightButton;
         private Matrix transform = Matrix.Identity;
         private AudioPlayer audioPlayer;
+        private InputManager input = new InputManager();
         public TimeSpan finishTime;
         private Stopwatch stopwatch = new Stopwatch();
         private String clockTime = "00:00";
@@ -106,11 +107,13 @@ namespace MotoTrialRacer
 				// TODO commented out because it breaks Android on startup Window.TextInput += (sender, e) => TextInputBuffer.PushChar(e.Character);
 			}
 
-			// Mouse simulates a single touch point on Desktop (DesktopGL).
-			// On Android/iOS real touch events are used automatically.
-			TouchPanel.EnableMouseTouchPoint = true;
+			// Mouse simulates a single touch point on Desktop via InputManager.GetTouches().
+			// TouchPanel.EnableMouseTouchPoint is not used because it is broken in the
+			// DesktopGL backend of the current MonoGame version.
+			// On Android/iOS real touch events are routed through InputManager.GetTouches() too.
 
-            // Show the OS cursor on Desktop; hide it on touch-only mobile devices.
+            // Show the OS cursor on Desktop/Windows so players can click on-screen buttons;
+            // hide it on touch-only mobile devices.
             IsMouseVisible = !isMobile;
 
             // 60 fps – keeps Box2D simulation stable
@@ -383,9 +386,31 @@ namespace MotoTrialRacer
         /// </summary>
         protected override void Update(GameTime gameTime)
         {
-            // Allow exit via gamepad Back button (controller / mobile Back button)
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            // Snapshot all input sources once per frame before any other logic.
+            input.BeginFrame();
+
+            // Context-aware Back/Escape handling (applies to both keyboard Escape
+            // and gamepad Back so a controller user gets the same behaviour):
+            //
+            //  1. Gameplay          → Pause (shows the resume menu)
+            //  2. Pause/resume menu → Resume (back to the game)
+            //  3. Level selector    → OpenMenu (back to the main menu)
+            //  4. Level editor      → LevelCreated(false) (back to the main menu)
+            //  5. Main menu         → Exit
+            //  6. Any other view    → no-op (e.g. WinView, HighScores, InfoView)
+            if (input.IsEscapeJustPressed || input.IsGamepadBackJustPressed)
+            {
+                if (editorOpen)
+                    LevelCreated(false);
+                else if (view == null)
+                    Pause();
+                else if (view is Menu && paused)
+                    Resume();
+                else if (view is LevelSelector)
+                    OpenMenu();
+                else if (view is Menu && !paused)
+                    this.Exit();
+            }
 
 #if MEASURE_FPS
             elapsedTime += gameTime.ElapsedGameTime;
@@ -399,14 +424,15 @@ namespace MotoTrialRacer
             if (view != null)
             {
                 level.disableBikeControls();
-                view.Update();
+                view.Update(input);
             }
             else if (!editorOpen)
             {
-                // TouchPanel.EnableMouseTouchPoint makes mouse clicks appear as touch events,
-                // so this block works identically on Desktop (mouse) and Mobile (touch).
-                TouchCollection touchCollection = TouchPanel.GetState();
-                if (touchCollection.Count() > 0)
+                // InputManager.GetTouches() returns the real TouchPanel on mobile and
+                // a mouse-synthesised TouchCollection on Desktop, replacing the broken
+                // TouchPanel.EnableMouseTouchPoint workaround.
+                var touchCollection = input.GetTouches();
+                if (touchCollection.Count > 0)
                 {
                     optionsButton.Update(touchCollection[0]);
                     exitButton.Update(touchCollection[0]);
@@ -417,7 +443,7 @@ namespace MotoTrialRacer
 
             if (!paused)
             {
-                level.Update();
+                level.Update(input);
             }
 
             clockTime = String.Format("{0:d2}:{1:d2}", stopwatch.Elapsed.Minutes,

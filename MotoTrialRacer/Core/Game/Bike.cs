@@ -475,9 +475,10 @@ namespace MotoTrialRacer
         }
 
         /// <summary>
-        /// Updates the positions of the parts and camera, the motorcycle speed and user inputs
+        /// Updates the positions of the parts and camera, the motorcycle speed and user inputs.
         /// </summary>
-        public void Update()
+        /// <param name="input">The game's centralised InputManager.</param>
+        public void Update(InputManager input)
         {
             Vector2 pos = parts[0].GetPosition();
             Vector2 pos2 = parts[2].GetPosition();
@@ -486,28 +487,32 @@ namespace MotoTrialRacer
             bikeSpeed[0] = parts[0].GetLinearVelocity().Length();
             bikeSpeed[1] = parts[2].GetAngularVelocity();
 
-            if (!RotationData.device)
+            // Use keyboard/gamepad input when:
+            //   a) running on Desktop (RotationData.device == false), OR
+            //   b) a gamepad is connected on mobile – you can't tilt the device
+            //      and hold a gamepad simultaneously, so the accelerometer is
+            //      bypassed entirely when a gamepad is present.
+            if (!RotationData.device || input.IsGamepadActive)
             {
-                KeyboardState keyboardState = Keyboard.GetState();
-                if (keyboardState.IsKeyDown(Keys.Up))
+                if (input.IsThrottleForward)
                 {
                     motor._enableMotor = true;
                     RotationData.xRot = -30;
                 }
 
-                if (keyboardState.IsKeyDown(Keys.Down))
+                if (input.IsThrottleBack)
                 {
                     motor._enableMotor = true;
                     RotationData.xRot = 0;
                 }
-                
-				if (keyboardState.IsKeyDown(Keys.Left))
+
+                if (input.IsLeanLeft)
                     leanBackwards();
-                
-				if (keyboardState.IsKeyDown(Keys.Right))
+
+                if (input.IsLeanRight)
                     leanForwards();
-                
-				if (keyboardState.IsKeyUp(Keys.Up) && keyboardState.IsKeyUp(Keys.Down))
+
+                if (input.IsThrottleIdle)
                 {
                     motor._enableMotor = false;
                     RotationData.xRot = 0;

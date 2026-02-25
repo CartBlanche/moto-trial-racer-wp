@@ -63,9 +63,9 @@ namespace MotoTrialRacer
         /// Updates the position of the info text corresponding to the touch inputs of the user.
         /// This implements the "flickable" feature. Also updates the buttons in this view.
         /// </summary>
-        public override void Update()
+        public override void Update(InputManager input)
         {
-            base.Update();
+            base.Update(input);
             if (touchChanged)
             {
                 if (touchLocation.State == TouchLocationState.Pressed)

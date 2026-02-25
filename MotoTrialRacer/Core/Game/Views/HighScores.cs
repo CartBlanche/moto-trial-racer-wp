@@ -93,9 +93,9 @@ namespace MotoTrialRacer
         /// <summary>
         /// Updates the buttons in this view
         /// </summary>
-        public override void Update()
+        public override void Update(InputManager input)
         {
-            base.Update();
+            base.Update(input);
             closeButton.Update(touchLocation);
             backButton.Update(touchLocation);
         }

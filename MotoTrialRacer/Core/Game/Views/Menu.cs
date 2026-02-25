@@ -76,14 +76,25 @@ namespace MotoTrialRacer
 				buttons[i].Position = pos;
 				pos.Y += (buttons[i].Height + spacing);
 			}
+
+			// Pre-focus the first item so keyboard/gamepad navigation is ready immediately.
+			FocusFirst();
 		}
+
+        protected override List<Button> GetNavigableButtons()
+        {
+            // Main list first, info button last so it is reachable but out of the way.
+            var all = new List<Button>(buttons);
+            all.Add(infoButton);
+            return all;
+        }
 
         /// <summary>
         /// Updates all the buttons in this view
         /// </summary>
-        public override void Update()
+        public override void Update(InputManager input)
         {
-            base.Update();
+            base.Update(input);
             infoButton.Update(touchLocation);
             foreach (Button but in buttons)
             {

@@ -49,9 +49,9 @@ namespace MotoTrialRacer
         /// <summary>
         /// Updates the name input and button UI components
         /// </summary>
-        public override void Update()
+        public override void Update(InputManager input)
         {
-            base.Update();
+            base.Update(input);
             if (touchChanged)
             {
                 nameInput.Update(touchLocation);

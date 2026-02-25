@@ -223,7 +223,7 @@ namespace MotoTrialRacer
             return component;
         }
 
-        public virtual void Update()
+        public virtual void Update(InputManager input)
         {
             world.Step(0.016666f, 10, 10);
             if (bikeShouldBeReleased)
@@ -240,7 +240,7 @@ namespace MotoTrialRacer
             transform.M42 = -camPos[1] * zoom + 350;
 
             audioPlayer.SetMotorPitch(bikeSpeed[1] * 0.05f - 1);
-            bike.Update();
+            bike.Update(input);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
