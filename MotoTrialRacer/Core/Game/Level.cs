@@ -245,18 +245,24 @@ namespace MotoTrialRacer
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
+            // The level owns its camera/zoom transform; the game owns the global
+            // presentation scale. Compose them: virtual world → virtual screen → pixels.
+            Matrix worldTransform = transform * MotoTrialRacerGame.GlobalTransformation;
+
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null,
-                              null, transform);
+                              null, worldTransform);
 
             for (int i = 0; i < components.Count; i++)
                 components[i].Draw(spriteBatch);
 
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, transform);
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, worldTransform);
             bike.Draw(spriteBatch);
             spriteBatch.End();
-            spriteBatch.Begin();
+            // Restore a batch in virtual space for the caller to draw HUD elements into.
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null,
+                              MotoTrialRacerGame.GlobalTransformation);
         }
     }
 }

@@ -374,12 +374,14 @@ namespace MotoTrialRacer
             {
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap,
-                                  null, null, null, transform);
+                                  null, null, null,
+                                  transform * MotoTrialRacerGame.GlobalTransformation);
                 for (int i = 0; i < components.Count; i++)
                     components[i].Draw(spriteBatch);
                 spriteBatch.Draw(bikePosTexture, bikePosDestination, Color.White);
                 spriteBatch.End();
-                spriteBatch.Begin();
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null,
+                                  MotoTrialRacerGame.GlobalTransformation);
                 grassButton.Draw(spriteBatch);
                 jumpButton.Draw(spriteBatch);
                 nailButton.Draw(spriteBatch);

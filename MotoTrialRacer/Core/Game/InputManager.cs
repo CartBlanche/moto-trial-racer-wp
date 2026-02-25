@@ -184,7 +184,19 @@ namespace MotoTrialRacer
         public TouchCollection GetTouches()
         {
             if (IsMobile)
-                return TouchPanel.GetState();
+            {
+                var raw = TouchPanel.GetState();
+                var scaled = new TouchLocation[raw.Count];
+                for (int i = 0; i < raw.Count; i++)
+                {
+                    var t = raw[i];
+                    var scaledPos = Vector2.Transform(
+                        t.Position,
+                        MotoTrialRacerGame.InverseGlobalTransformation);
+                    scaled[i] = new TouchLocation(t.Id, t.State, scaledPos);
+                }
+                return new TouchCollection(scaled);
+            }
 
             bool wasDown = _lastMouse.LeftButton    == ButtonState.Pressed;
             bool isDown  = _currentMouse.LeftButton == ButtonState.Pressed;
@@ -201,7 +213,13 @@ namespace MotoTrialRacer
             else // wasDown && !isDown
                 state = TouchLocationState.Released;
 
-            var pos = new Vector2(_currentMouse.X, _currentMouse.Y);
+            // Transform pixel coordinates → virtual 800×480 space so hit-testing
+            // against Button rectangles (which live in virtual space) works correctly
+            // at any window size or on mobile.
+            var pos = Vector2.Transform(
+                new Vector2(_currentMouse.X, _currentMouse.Y),
+                MotoTrialRacerGame.InverseGlobalTransformation);
+
             return new TouchCollection(new[] { new TouchLocation(0, state, pos) });
         }
     }

@@ -31,6 +31,20 @@ namespace MotoTrialRacer
     /// </summary>
     public class MotoTrialRacerGame : Microsoft.Xna.Framework.Game
     {
+        // The game was designed at 800×480. All gameplay coordinates, button
+        // positions, and level geometry use this virtual resolution. A global
+        // transformation matrix scales and centres this virtual canvas onto
+        // whatever the actual backbuffer size is, adding letterbox/pillarbox
+        // bars as needed.
+        public const int VIRTUAL_WIDTH  = 800;
+        public const int VIRTUAL_HEIGHT = 480;
+
+        /// <summary>Maps virtual 800×480 space → actual screen pixels.</summary>
+        public static Matrix GlobalTransformation { get; private set; } = Matrix.Identity;
+
+        /// <summary>Maps actual screen pixels → virtual 800×480 space (for input).</summary>
+        public static Matrix InverseGlobalTransformation { get; private set; } = Matrix.Identity;
+
         public static GraphicsDeviceManager Graphics { get; private set; }
         private SpriteBatch spriteBatch;
         private Level level;
@@ -55,6 +69,10 @@ namespace MotoTrialRacer
         private bool editorOpen = false;
         public String currentLevelName = "";
 
+        // Cached backbuffer size used to detect window resizes.
+        private int _backbufferWidth;
+        private int _backbufferHeight;
+
 #if MEASURE_FPS
         private TimeSpan elapsedTime = TimeSpan.Zero;
         private int frameRate = 0;
@@ -63,12 +81,12 @@ namespace MotoTrialRacer
 
         public int getWidth()
         {
-            return GraphicsDevice.Viewport.Width;
+            return VIRTUAL_WIDTH;
         }
 
         public int getHeight()
         {
-            return GraphicsDevice.Viewport.Height;
+            return VIRTUAL_HEIGHT;
         }
 
         public float relativeX(float xin)
@@ -99,9 +117,12 @@ namespace MotoTrialRacer
             }
             else
             {
-                // Desktop: fixed 800×480 window (original design resolution)
-                Graphics.PreferredBackBufferWidth  = 800;
-                Graphics.PreferredBackBufferHeight = 480;
+                // Desktop: start at the virtual design resolution.
+                // AllowUserResizing lets the player make the window any size;
+                // ScalePresentationArea will letterbox/pillarbox automatically.
+                Graphics.PreferredBackBufferWidth  = VIRTUAL_WIDTH;
+                Graphics.PreferredBackBufferHeight = VIRTUAL_HEIGHT;
+                Window.AllowUserResizing = true;
 
 				// Hook Window.TextInput so TextInput UI component can receive keyboard characters
 				// TODO commented out because it breaks Android on startup Window.TextInput += (sender, e) => TextInputBuffer.PushChar(e.Character);
@@ -371,6 +392,8 @@ namespace MotoTrialRacer
             rightButton.ButtonPressed += (sender => level.leanBikeForwards());
 
             clockPos = new Vector2(0.45f * getWidth(), 0.89f * getHeight());
+
+            ScalePresentationArea();
         }
 
         /// <summary>
@@ -382,12 +405,60 @@ namespace MotoTrialRacer
         }
 
         /// <summary>
+        /// Computes the GlobalTransformation matrix that uniformly scales and centres
+        /// the virtual 800×480 canvas onto the actual backbuffer, preserving the
+        /// aspect ratio with letterbox (horizontal bars) or pillarbox (vertical bars).
+        /// Also stores the inverse for transforming mouse/touch input back to virtual space.
+        /// Called once after LoadContent and again whenever the window is resized.
+        /// </summary>
+        private void ScalePresentationArea()
+        {
+            _backbufferWidth  = GraphicsDevice.PresentationParameters.BackBufferWidth;
+            _backbufferHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
+
+            if (_backbufferWidth == 0 || _backbufferHeight == 0)
+                return;
+
+            float baseAspect   = (float)VIRTUAL_WIDTH  / VIRTUAL_HEIGHT;
+            float screenAspect = (float)_backbufferWidth / _backbufferHeight;
+
+            float scalingFactor;
+            float horizontalOffset = 0;
+            float verticalOffset   = 0;
+
+            if (screenAspect > baseAspect)
+            {
+                // Wider screen: scale by height, pillarbox left/right.
+                scalingFactor    = (float)_backbufferHeight / VIRTUAL_HEIGHT;
+                horizontalOffset = (_backbufferWidth - VIRTUAL_WIDTH * scalingFactor) / 2f;
+            }
+            else
+            {
+                // Taller screen: scale by width, letterbox top/bottom.
+                scalingFactor  = (float)_backbufferWidth / VIRTUAL_WIDTH;
+                verticalOffset = (_backbufferHeight - VIRTUAL_HEIGHT * scalingFactor) / 2f;
+            }
+
+            GlobalTransformation        = Matrix.CreateScale(scalingFactor) *
+                                          Matrix.CreateTranslation(horizontalOffset, verticalOffset, 0);
+            InverseGlobalTransformation = Matrix.Invert(GlobalTransformation);
+
+            Debug.WriteLine($"[ScalePresentationArea] Backbuffer={_backbufferWidth}x{_backbufferHeight} " +
+                            $"Scale={scalingFactor:F3} Offset=({horizontalOffset:F0},{verticalOffset:F0})");
+        }
+
+        /// <summary>
         /// The main update method for the game loop.
         /// </summary>
         protected override void Update(GameTime gameTime)
         {
             // Snapshot all input sources once per frame before any other logic.
             input.BeginFrame();
+
+            // Recalculate the presentation scale if the window was resized.
+            if (_backbufferWidth  != GraphicsDevice.PresentationParameters.BackBufferWidth ||
+                _backbufferHeight != GraphicsDevice.PresentationParameters.BackBufferHeight)
+                ScalePresentationArea();
 
             // Context-aware Back/Escape handling (applies to both keyboard Escape
             // and gamepad Back so a controller user gets the same behaviour):
@@ -460,9 +531,12 @@ namespace MotoTrialRacer
 #if MEASURE_FPS
             frameCounter++;
 #endif
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
-            Rectangle screen = new Rectangle(0, 0, getWidth(), getHeight());
+            // Clear to black so letterbox/pillarbox bars outside the virtual canvas
+            // are filled rather than showing undefined pixels.
+            GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null,
+                              GlobalTransformation);
+            Rectangle screen = new Rectangle(0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
             spriteBatch.Draw(background, screen, Color.White);
 
             level.Draw(spriteBatch);
